@@ -1,7 +1,7 @@
-package org.personal.durdo
+package org.personal.durdina.s3dr
 
-import org.personal.durdo.dist.ExactlyOnceFileReaderWorker
-import org.personal.durdo.io.S3Content
+import org.personal.durdina.s3dr.dist.ExactlyOnceFileReaderWorker
+import org.personal.durdina.s3dr.io.S3Content
 
 /**
   * Created by misko on 25/04/2016.

@@ -1,4 +1,4 @@
-package org.personal.durdo.dist
+package org.personal.durdina.s3dr.dist
 
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit
 import org.apache.curator.framework.CuratorFrameworkFactory
 import org.apache.curator.framework.recipes.locks.{InterProcessLock, InterProcessSemaphoreMutex}
 import org.apache.curator.retry.ExponentialBackoffRetry
-import org.personal.durdo.io.{S3Client, S3File}
+import org.personal.durdina.s3dr.io.{S3Client, S3File}
 
 import scala.collection._
 
@@ -19,7 +19,7 @@ object ExactlyOnceFileReaderWorker {
   val s3Client = new S3Client()
   val FileNameTemplate = "data-{id}.txt"
   val ProcessedFlagPrefix = "PROCESSED-"
-  val Bucket = "vdna.dev.eu-west-1.distprim"
+  val Bucket = "dev.eu-west-1.s3reader"
 
   // Curator/Zookeeper stuff
   val LockPath: String = "/distprim"

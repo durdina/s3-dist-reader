@@ -1,4 +1,4 @@
-package org.personal.durdo.io
+package org.personal.durdina.s3dr.io
 
 /**
   * Created by misko on 26/04/2016.

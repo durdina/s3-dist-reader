@@ -1,4 +1,4 @@
-package org.personal.durdo.io
+package org.personal.durdina.s3dr.io
 
 import java.io.File
 
@@ -10,7 +10,7 @@ object S3Content {
 
   // TODO move to constants
   val FileNameTemplate = "data-{id}.txt"
-  val Bucket = "vdna.dev.eu-west-1.distprim"
+  val Bucket = "dev.eu-west-1.s3reader"
   val s3Client = new S3Client()
 
   def initialize(numFiles: Integer) = {

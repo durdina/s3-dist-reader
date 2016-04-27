@@ -1,4 +1,4 @@
-package org.personal.durdo
+package org.personal.durdina.s3dr
 
 import java.io.{File, InputStream, StringWriter}
 import java.net.{URLClassLoader, URLDecoder}

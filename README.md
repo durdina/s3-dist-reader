@@ -9,10 +9,14 @@ all files are processed eventually and each file is processed only once.
 
 S3 does not provide key locking nor it provides strong consistency over key values.
 Therefore a common technique to create 'lock files' does not work and mutual exclusion
-of mutliple instances trying to access single file must be carried out externally. Such
+of multiple instances trying to access single file must be carried out externally. Such
 an external store can be a relational database or any datastore with strong consistency.
 
 This project implements S3 readers using AWS SDK and mutual exclusion by Zookeeper.
+
+##Running
+
+Make sure that Zookeeper Server is running at hostname and port as given in the configuraiton.
 
 ##Testing scenarios (to be completed)
 

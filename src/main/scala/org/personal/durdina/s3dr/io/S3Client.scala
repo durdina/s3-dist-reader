@@ -1,4 +1,4 @@
-package org.personal.durdo.io
+package org.personal.durdina.s3dr.io
 
 import java.io.File
 
@@ -14,14 +14,9 @@ import scala.collection.JavaConverters._
   */
 class S3Client {
 
-  // geyser - used for testing?
-  val accessKey = "AKIAIQJUGV6J23TG2MAQ"
-  val secretKey = "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"
-
-  // maelstrom_dev
-  // http://git.visualdna.com/projects/SYS/repos/ansible-playbooks/commits/45ac1f67a6fdec68d6b26bb2c6b1acf19458a4ce#sysops-master/inventories/devel/group_vars/all/vars
-  //  val accessKey = "AKIAI7Y77RRZZQOLLYNA"
-  //  val secretKey = "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"
+  // TODO: externalize
+  val accessKey = "AKIAIM4TY5PUZ3VXMDKA"
+  val secretKey = "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"
 
   val credentials: AWSCredentials = new BasicAWSCredentials(accessKey, secretKey)
   val s3client = new AmazonS3Client(credentials)
