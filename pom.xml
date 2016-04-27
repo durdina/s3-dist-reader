@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.personal.durdina</groupId>
+    <artifactId>s3-dist-reader</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <source.jdk.version>1.8</source.jdk.version>
+        <target.jdk.version>${source.jdk.version}</target.jdk.version>
+        <scala.version>2.11.5</scala.version>
+        <scalaBinaryVersion>2.11</scalaBinaryVersion>
+        <aws.version>1.9.40</aws.version>
+        <curator.version>2.9.1</curator.version>
+        <junit.version>3.8.1</junit.version>
+    </properties>
+
+
+    <dependencies>
+        <!-- platform dependencies -->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+
+        <!-- technical dependencies -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <version>${curator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>${curator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-x-discovery</artifactId>
+            <version>${curator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-test</artifactId>
+            <version>${curator.version}</version>
+        </dependency>
+
+        <!-- technical dependencies -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>${aws.version}</version>
+        </dependency>
+
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                    <configuration>
+                        <source>${source.jdk.version}</source>
+                        <target>${target.jdk.version}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.4.3</version>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.scala-tools</groupId>
+                    <artifactId>maven-scala-plugin</artifactId>
+                    <version>2.15.2</version>
+                    <configuration>
+                        <scalaVersion>${scala.version}</scalaVersion>
+                        <checkMultipleScalaVersions>false</checkMultipleScalaVersions>
+                        <args>
+                            <arg>-deprecation</arg>
+                            <arg>-feature</arg>
+                            <arg>-target:jvm-${target.jdk.version}</arg>
+                        </args>
+                        <jvmArgs>
+                            <jvmArg>-Xms64m</jvmArg>
+                            <jvmArg>-Xmx1024m</jvmArg>
+                        </jvmArgs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.4.3</version>
+                    <configuration>
+                        <useSystemClassLoader>false</useSystemClassLoader>
+                        <argLine>-Xmx512m</argLine>
+                        <includes>
+                            <include>**/*Unit.java</include>
+                            <include>**/*Unit.scala</include>
+                            <include>**/*Test.java</include>
+                            <include>**/*Test.scala</include>
+                            <include>**/*Spec.java</include>
+                            <include>**/*Spec.scala</include>
+                        </includes>
+                        <excludes>
+                            <exclude>**/*It.java</exclude>
+                            <exclude>**/*It.scala</exclude>
+                            <exclude>**/*IT.java</exclude>
+                            <exclude>**/*IT.scala</exclude>
+                            <exclude>**/*IntegrationTest.java</exclude>
+                            <exclude>**/*IntegrationTest.scala</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.19</version>
+                    <configuration>
+                        <includes>
+                            <include>**/*It.java</include>
+                            <include>**/*It.scala</include>
+                            <include>**/*IT.java</include>
+                            <include>**/*IT.scala</include>
+                            <include>**/*IntegrationTest.java</include>
+                            <include>**/*IntegrationTest.scala</include>
+                        </includes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>scala-compile-first</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>scala-test-compile</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
