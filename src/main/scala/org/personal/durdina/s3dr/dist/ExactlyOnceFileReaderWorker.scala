@@ -38,16 +38,15 @@ object ExactlyOnceFileReaderWorker {
     val total = argMap("total").toInt // TODO: distribute the total number of instances automatically by lookup into registry (zookeeper) - distributed counter
     println(s"Process id=$id from group of $total processes starts")
 
-    val allFiles = s3Client.listOfFiles(new S3File(Bucket, ""))
-    val processables = allFiles.filter(_.startsWith("data-"))
+    val processables = s3Client.listOfFiles(new S3File(Bucket, "data-"))
 
     var currentIx = ((processables.size.toDouble / total) * (id - 1)).ceil.toInt
-    val finishIx = currentIx + processables.size
+    val finishIx = currentIx - 1 + processables.size
 
     println(s"Process id=$id starts processing from $currentIx up to ${finishIx % processables.size}")
 
     // TODO: rework to immutable (using recursion)
-    while (currentIx < finishIx) {
+    while (currentIx <= finishIx) {
       // try to acquire lock for a file - skip if not possible (other process working on that file)
       val processable = processables(currentIx % processables.size)
       val lock: InterProcessLock = new InterProcessSemaphoreMutex(curatorClient, s"$LockPath/$processable")
@@ -65,6 +64,7 @@ object ExactlyOnceFileReaderWorker {
             System.exit(2)
           }
         } finally {
+          // TODO: should not release before we can be sure that all other S3 instances see the flag file (maybe this guarantee cannot be made and the lock should remain with some looong TTL that would minimise the chance that a flag file would not be seen)
           lock.release()
         }
       }
