@@ -1,7 +1,8 @@
 package org.personal.durdina.s3dr
 
-import java.io.{File, InputStream, StringWriter}
+import java.io._
 import java.net.{URLClassLoader, URLDecoder}
+import java.util.concurrent.TimeUnit
 
 import scala.io.Source
 
@@ -29,9 +30,10 @@ class ProcessRunner[T](val clazz: Class[T], args: String*) {
 
   def rc = process.exitValue()
 
+
   def printout() = {
-    val rc = process.waitFor()
-    println(if (rc == 0) output else output + error)
+    val finished = process.waitFor(15, TimeUnit.SECONDS)
+    println(if (finished && process.exitValue() == 0) output else output + error)
   }
 
   def logs(): List[(Long, String, String)] = {
@@ -44,20 +46,21 @@ class ProcessRunner[T](val clazz: Class[T], args: String*) {
 
   // TODO: implement thread reading from process inputStream and asynchronously writing to the console
   lazy val output = {
-    process.waitFor()
     readStream(process.getInputStream)
   }
 
   lazy val error = {
-    process.waitFor()
     readStream(process.getErrorStream)
   }
 
   private def readStream(is: InputStream) = {
-    val s = new java.util.Scanner(is).useDelimiter("\\A")
-
     val sw = new StringWriter()
-    while (s.hasNext) sw.write(s.next())
+
+    val br = new BufferedReader(new InputStreamReader(is))
+    while (br.ready()) {
+      sw.write(br.readLine())
+      sw.write('\n')
+    }
     sw.toString
   }
 

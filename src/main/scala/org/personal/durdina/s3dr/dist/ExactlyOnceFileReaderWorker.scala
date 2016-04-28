@@ -57,7 +57,7 @@ object ExactlyOnceFileReaderWorker {
             processRunsNormally(id, new S3File(Bucket, processable))
           else if (argMap.contains("fail"))
             processFail(id)
-          else if (argMap.contains("run-forever"))
+          else if (argMap.contains("forever"))
             processRunsEndlessly(id)
           else {
             Console.err.print("Missing mode parameter - please add on of normal|fail|run-forever")
@@ -99,7 +99,7 @@ object ExactlyOnceFileReaderWorker {
   }
 
   private def processFail(id: Int) {
-    println(s"Process id=$id FAILs forcefully")
+    println(s"Process id=$id FAILs deliberately and forcefully")
     System.exit(1)
   }
 

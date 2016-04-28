@@ -13,7 +13,7 @@ object Main {
 
     S3Content.initialize(10)
 
-    val p1 = new ProcessRunner(ExactlyOnceFileReaderWorker.getClass, "id=1", "total=4", "normal").run()
+    val p1 = new ProcessRunner(ExactlyOnceFileReaderWorker.getClass, "id=1", "total=4", "forever").run()
     val p2 = new ProcessRunner(ExactlyOnceFileReaderWorker.getClass, "id=2", "total=4", "normal").run()
     val p3 = new ProcessRunner(ExactlyOnceFileReaderWorker.getClass, "id=3", "total=4", "fail").run()
     val p4 = new ProcessRunner(ExactlyOnceFileReaderWorker.getClass, "id=4", "total=4", "normal").run()
